@@ -1,0 +1,42 @@
+#
+# Copyright 2021 Splunk Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+[tool.poetry]
+name = "conf_parser"
+version = "0.1.0"
+description = "Splunk .conf files parser"
+authors = ["arys-splunk <arys@splunk.com>"]
+
+readme = "README.md"
+
+repository = "https://github.com/arys-splunk/conf-parser"
+homepage = "https://github.com/arys-splunk/conf-parser"
+
+keywords = ["splunk"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.dev-dependencies]
+pre-commit = "^2.14.1"
+pytest = "^6.2.5"
+
+[build-system]
+requires = ["poetry>=1.0.2"]
+build-backend = "poetry.masonry.api"
+
+[tool.isort]
+profile = "black"
