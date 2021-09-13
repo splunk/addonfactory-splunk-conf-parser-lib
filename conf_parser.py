@@ -27,6 +27,7 @@ class TABConfigParser(configparser.RawConfigParser):
     2. Additional comment prefix such as *
     3. Support multiline end with \
     """
+
     def _read(self, fp, fpname):
         """
         Override the built-in _read() method to read comments
