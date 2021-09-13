@@ -16,7 +16,7 @@
 
 [tool.poetry]
 name = "conf_parser"
-version = "0.1.2"
+version = "0.2.0"
 description = "Splunk .conf files parser"
 authors = ["arys-splunk <arys@splunk.com>"]
 
