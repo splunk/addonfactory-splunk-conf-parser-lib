@@ -13,3 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+header:
+  license:
+    spdx-id: Apache-2.0
+    copyright-owner: Splunk Inc.
+
+  paths-ignore:
+    - ".github/"
+    - "**/*.md"
+    - "LICENSE"
+    - "*.lock"
+    - ".*"
