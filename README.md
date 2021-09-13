@@ -2,7 +2,7 @@
 
 This repository provides a one-file library to parse Splunk-specific `.conf` files.
 
-Currently, it supports: 
+Currently, it supports:
 
 1. Read/write .conf files with comments
 2. Additional comment prefix such as *
