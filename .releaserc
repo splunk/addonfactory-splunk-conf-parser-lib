@@ -47,7 +47,7 @@
       [
         "@semantic-release/git",
         {
-          "assets": [pyproject.toml"],
+          "assets": ["pyproject.toml"],
           "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}",
         },
       ],
