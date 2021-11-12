@@ -55,7 +55,7 @@ class TABConfigParser(configparser.RawConfigParser):
 
                 # save the lineno & comments
                 if cursect:
-                    name = "{}{}".format(COMMENT_KEY, comment_index)
+                    name = f"{COMMENT_KEY}{comment_index}"
                     comment_index += 1
                     cursect[name] = line
                 else:
