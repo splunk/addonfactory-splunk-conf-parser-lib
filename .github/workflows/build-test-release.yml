@@ -93,7 +93,7 @@ jobs:
           source "$HOME/.poetry/env"
           poetry build
       - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v2.6.0
+        uses: cycjimmy/semantic-release-action@v2
         with:
           semantic_version: 17
           extra_plugins: |
