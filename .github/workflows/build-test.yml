@@ -42,7 +42,7 @@ jobs:
             -   name: Run pytest
                 run: |
                     source "$HOME/.poetry/env"
-                    poetry run pytest
+                    poetry run pytest --junitxml=test-results/junit.xml
     compliance-copyrights:
         name: Compliance Copyright Headers
         runs-on: ubuntu-latest
