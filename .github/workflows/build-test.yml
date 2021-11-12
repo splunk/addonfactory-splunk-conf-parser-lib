@@ -43,6 +43,11 @@ jobs:
                 run: |
                     source "$HOME/.poetry/env"
                     poetry run pytest --junitxml=test-results/junit.xml
+            -   uses: actions/upload-artifact@v2
+                if: success() || failure()
+                with:
+                    name: test-results-unit-python_${{ matrix.python-version }}
+                    path: test-results/*
     compliance-copyrights:
         name: Compliance Copyright Headers
         runs-on: ubuntu-latest
