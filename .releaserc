@@ -51,6 +51,6 @@
           "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}",
         },
       ],
-      ["@semantic-release/github", { "assets": [pyproject.toml"] }],
+      ["@semantic-release/github", { "assets": ["pyproject.toml"] }],
     ],
 }
