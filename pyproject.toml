@@ -16,14 +16,14 @@
 
 [tool.poetry]
 name = "conf_parser"
-version = "0.2.0"
+version = "0.2.1"
 description = "Splunk .conf files parser"
-authors = ["arys-splunk <arys@splunk.com>"]
+authors = ["Splunk <addonfactory@splunk.com>"]
 
 readme = "README.md"
 
-repository = "https://github.com/arys-splunk/conf-parser"
-homepage = "https://github.com/arys-splunk/conf-parser"
+repository = "https://github.com/splunk/addonfactory-splunk-conf-parser-lib"
+homepage = "https://github.com/splunk/addonfactory-splunk-conf-parser-lib"
 
 keywords = ["splunk"]
 
