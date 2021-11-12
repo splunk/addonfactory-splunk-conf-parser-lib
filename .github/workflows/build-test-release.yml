@@ -15,6 +15,9 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: "3.7"
+      - name: Install actionlint
+        run: |
+          bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/v1.6.3/scripts/download-actionlint.bash)
       - uses: pre-commit/action@v2.0.3
   test-unit:
     name: Unit tests on ${{ matrix.platform }} using Python ${{ matrix.python-version }}
@@ -37,10 +40,12 @@ jobs:
         run: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
       - name: Install Code
         run: |
+          # shellcheck disable=SC1090
           source "$HOME/.poetry/env"
           poetry install
       - name: Run pytest
         run: |
+          # shellcheck disable=SC1090
           source "$HOME/.poetry/env"
           poetry run pytest --junitxml=test-results/junit.xml
       - uses: actions/upload-artifact@v2
