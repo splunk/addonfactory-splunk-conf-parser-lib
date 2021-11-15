@@ -72,7 +72,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          submodules: false
           # Very important: semantic-release won't trigger a tagged
           # build if this is not set false
           persist-credentials: false
@@ -102,6 +101,8 @@ jobs:
             @google/semantic-release-replace-plugin
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_ADMIN }}
+          PYPI_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
 
   update-semver:
     name: Move Respository semver tags
