@@ -45,6 +45,14 @@
       ],
       "@semantic-release/release-notes-generator",
       [
+        "@semantic-release/exec",
+        {
+          "prepareCmd": "./.github/workflows/sr-prepare.sh ${nextRelease.version}",
+          "publishCmd": "./.github/workflows/sr-release.sh",
+          "shell": "bash"
+        },
+      ],
+      [
         "@semantic-release/git",
         {
           "assets": ["pyproject.toml"],
