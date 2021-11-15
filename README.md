@@ -1,4 +1,4 @@
-# conf-parser
+# addonfactory_splunk_conf_parser_lib
 
 This repository provides a one-file library to parse Splunk-specific `.conf` files.
 

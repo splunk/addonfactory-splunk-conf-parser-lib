@@ -17,7 +17,7 @@ import configparser
 import io
 import unittest
 
-import conf_parser
+import addonfactory_splunk_conf_parser_lib as conf_parser
 
 
 class TABConfigParserTest(unittest.TestCase):
