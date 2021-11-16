@@ -72,7 +72,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          submodules: false
           # Very important: semantic-release won't trigger a tagged
           # build if this is not set false
           persist-credentials: false
