@@ -10,4 +10,4 @@ jobs:
     uses: arys-splunk/github-workflows-reuse/.github/workflows/agreements.yml@main
     secrets:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      PERSONAL_ACCESS_TOKEN: ${{ secrets.PAT_CLATOOL }}
+      PAT_CLATOOL: ${{ secrets.PAT_CLATOOL }}
