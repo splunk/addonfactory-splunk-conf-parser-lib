@@ -7,6 +7,6 @@ on:
 
 jobs:
   call-workflow-preview:
-    uses: arys-splunk/github-workflows-reuse/.github/workflows/release-notes.yml@main
+    uses: splunk/addonfactory-github-workflows/.github/workflows/reusable-release-notes.yaml@v1.0.0
     secrets:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
