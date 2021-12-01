@@ -16,7 +16,7 @@
 
 [tool.poetry]
 name = "addonfactory_splunk_conf_parser_lib"
-version = "0.3.3"
+version = "0.3.4"
 description = "Splunk .conf files parser"
 authors = ["Splunk <addonfactory@splunk.com>"]
 
