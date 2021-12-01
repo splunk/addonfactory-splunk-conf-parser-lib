@@ -227,6 +227,5 @@ class TABConfigParser(configparser.RawConfigParser):
                 ):
                     continue
                 kv[k] = v
-            if kv:
-                res[section] = kv
+            res[section] = kv
         return res
