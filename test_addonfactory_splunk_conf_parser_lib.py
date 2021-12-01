@@ -163,6 +163,41 @@ tag2 = enabled
         }
         self.assertEqual(expected_item_dict, parser.item_dict())
 
+    def test_item_dict_when_there_is_empty_stanza(self):
+        conf = """
+[stanza_with_something]
+key = value
+
+[empty_stanza]
+"""
+        parser = conf_parser.TABConfigParser()
+        parser.read_string(conf)
+        expected_item_dict = {
+            "stanza_with_something": {
+                "key": "value",
+            },
+            "empty_stanza": {},
+        }
+        self.assertEqual(expected_item_dict, parser.item_dict())
+
+    def test_item_dict_when_there_is_empty_stanza_and_comment(self):
+        conf = """
+[stanza_with_something]
+key = value
+
+[empty_stanza]
+# This is a comment
+"""
+        parser = conf_parser.TABConfigParser()
+        parser.read_string(conf)
+        expected_item_dict = {
+            "stanza_with_something": {
+                "key": "value",
+            },
+            "empty_stanza": {},
+        }
+        self.assertEqual(expected_item_dict, parser.item_dict())
+
     def test_remove_existing_section(self):
         conf = """
 # Comment
