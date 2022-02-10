@@ -37,16 +37,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install Poetry
-        run: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
-      - name: Install Code
         run: |
-          # shellcheck disable=SC1090
-          source "$HOME/.poetry/env"
+          run: curl -sSL https://install.python-poetry.org | python3 -
           poetry install
-      - name: Run pytest
-        run: |
-          # shellcheck disable=SC1090
-          source "$HOME/.poetry/env"
           poetry run pytest --junitxml=test-results/junit.xml
       - uses: actions/upload-artifact@v2
         if: success() || failure()
@@ -83,16 +76,9 @@ jobs:
         with:
           python-version: "3.7"
       - name: Install Poetry
-        run: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
-      - name: Install Code
         run: |
-          # shellcheck disable=SC1090
-          source "$HOME/.poetry/env"
+          curl -sSL https://install.python-poetry.org | python3 -
           poetry install
-      - name: Build
-        run: |
-          # shellcheck disable=SC1090
-          source "$HOME/.poetry/env"
           poetry build
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v2
