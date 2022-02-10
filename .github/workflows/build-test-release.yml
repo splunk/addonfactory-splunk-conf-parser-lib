@@ -20,38 +20,21 @@ jobs:
           bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/v1.6.8/scripts/download-actionlint.bash)
       - uses: pre-commit/action@v2.0.3
   test-unit:
-    name: Unit tests on ${{ matrix.platform }} using Python ${{ matrix.python-version }}
-    runs-on: ${{ matrix.platform }}
-    continue-on-error: true
-    strategy:
-      matrix:
-        python-version:
-          - "3.7"
-          - "3.8"
-          - "3.9"
-        platform: [ ubuntu-latest, macos-latest ]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup python
-        uses: actions/setup-python@v2
+      - uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.7
       - name: Install Poetry
-        run: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
-      - name: Install Code
         run: |
-          # shellcheck disable=SC1090
-          source "$HOME/.poetry/env"
+          curl -sSL https://install.python-poetry.org | python3 -
           poetry install
-      - name: Run pytest
-        run: |
-          # shellcheck disable=SC1090
-          source "$HOME/.poetry/env"
           poetry run pytest --junitxml=test-results/junit.xml
       - uses: actions/upload-artifact@v2
         if: success() || failure()
         with:
-          name: test-results-unit-python_${{ matrix.python-version }}
+          name: test-results-unit-python
           path: test-results/*
   compliance-copyrights:
     name: Compliance Copyright Headers
@@ -83,16 +66,9 @@ jobs:
         with:
           python-version: "3.7"
       - name: Install Poetry
-        run: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
-      - name: Install Code
         run: |
-          # shellcheck disable=SC1090
-          source "$HOME/.poetry/env"
+          curl -sSL https://install.python-poetry.org | python3 -
           poetry install
-      - name: Build
-        run: |
-          # shellcheck disable=SC1090
-          source "$HOME/.poetry/env"
           poetry build
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v2
