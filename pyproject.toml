@@ -36,6 +36,3 @@ pytest = "^7.2.1"
 [build-system]
 requires = ["poetry>=1.0.2"]
 build-backend = "poetry.masonry.api"
-
-[tool.isort]
-profile = "black"
