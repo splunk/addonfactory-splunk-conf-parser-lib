@@ -13,21 +13,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: run fossa anlyze and create report
-        run: |
+      - run: |
           curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install-latest.sh | bash
           fossa analyze --debug
           fossa report attribution --format text > /tmp/THIRDPARTY
         env:
           FOSSA_API_KEY: ${{ secrets.FOSSA_API_KEY }}
-      - name: upload THIRDPARTY file
-        uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v3
         with:
           name: THIRDPARTY
           path: /tmp/THIRDPARTY
-      - name: run fossa test
-        run: |
-          fossa test --debug
+      - run: fossa test --debug
         env:
           FOSSA_API_KEY: ${{ secrets.FOSSA_API_KEY }}
 
@@ -51,9 +47,8 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
+      - run: |
+          curl -sSL https://install.python-poetry.org | python3 - --version 1.4.2
           poetry install
           poetry run pytest --junitxml=test-results/junit.xml
       - uses: actions/upload-artifact@v3
@@ -61,17 +56,14 @@ jobs:
         with:
           name: test-results-unit-python
           path: test-results/*
+
   compliance-copyrights:
-    name: Compliance Copyright Headers
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Check License Header
-        uses: apache/skywalking-eyes@v0.4.0
+      - uses: actions/checkout@v3
+      - uses: apache/skywalking-eyes@v0.4.0
 
   publish:
-    name: Build Release
     needs:
       - fossa-scan
       - compliance-copyrights
@@ -85,17 +77,14 @@ jobs:
           # Very important: semantic-release won't trigger a tagged
           # build if this is not set false
           persist-credentials: false
-      - name: Setup python
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v4
         with:
           python-version: "3.7"
-      - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
+      - run: |
+          curl -sSL https://install.python-poetry.org | python3 - --version 1.4.2
           poetry install
           poetry build
-      - name: Semantic Release
-        uses: splunk/semantic-release-action@v1.3
+      - uses: splunk/semantic-release-action@v1.3
         with:
           extra_plugins: |
             @google/semantic-release-replace-plugin

@@ -24,3 +24,4 @@ header:
     - "LICENSE"
     - "*.lock"
     - ".*"
+    - "renovate.json"
