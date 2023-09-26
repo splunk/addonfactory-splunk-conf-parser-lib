@@ -48,7 +48,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: |
-          curl -sSL https://install.python-poetry.org | python3 - --version 1.4.2
+          curl -sSL https://install.python-poetry.org | python3 - --version 1.5.1
           poetry install
           poetry run pytest --junitxml=test-results/junit.xml
       - uses: actions/upload-artifact@v3
@@ -81,7 +81,7 @@ jobs:
         with:
           python-version: "3.7"
       - run: |
-          curl -sSL https://install.python-poetry.org | python3 - --version 1.4.2
+          curl -sSL https://install.python-poetry.org | python3 - --version 1.5.1
           poetry install
           poetry build
       - id: semantic
