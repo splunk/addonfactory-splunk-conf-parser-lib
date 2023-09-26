@@ -10,4 +10,4 @@ Currently, it supports:
 
 ## Development
 
-This project uses `poetry 1.4.2`.
+This project uses `poetry 1.5.1`.
