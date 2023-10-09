@@ -41,7 +41,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [ 3.7, 3.8, 3.9, "3.10", "3.11" ]
+        python-version: [ 3.7, 3.8, 3.9, "3.10", "3.11", "3.12" ]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
@@ -54,7 +54,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         if: success() || failure()
         with:
-          name: test-results-unit-python
+          name: test-results-unit-python-${{ matrix.python-version }}
           path: test-results/*
 
   compliance-copyrights:
@@ -92,11 +92,9 @@ jobs:
           gpg_private_key: ${{ secrets.SA_GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.SA_GPG_PASSPHRASE }}
           extra_plugins: |
-            @google/semantic-release-replace-plugin
+            semantic-release-replace-plugin
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_ADMIN }}
       - if: ${{ steps.semantic.outputs.new_release_published == 'true' }}
-        uses: splunk/pypi-publish-action@v1.0
-        with:
-          pypi_username: ${{ secrets.PYPI_USERNAME }}
-          pypi_token: ${{ secrets.PYPI_TOKEN }}
+        run:
+          poetry publish -n -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_TOKEN }}
