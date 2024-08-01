@@ -83,8 +83,7 @@ tag = enabled
         parser.read_string(conf)
         output = io.StringIO()
         parser.write(output)
-        expected_output = conf + "\n"
-        self.assertEqual(expected_output, output.getvalue())
+        self.assertEqual(conf, output.getvalue())
 
     def test_items(self):
         conf = """
