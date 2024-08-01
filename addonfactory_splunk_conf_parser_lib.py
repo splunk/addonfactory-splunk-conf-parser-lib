@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 import configparser
+from io import TextIOBase
+from os import SEEK_SET
 
 COMMENT_PREFIX = ";#*"
 COMMENT_KEY = "__COMMENTS__"
@@ -149,7 +151,7 @@ class TABConfigParser(configparser.RawConfigParser):
                 if isinstance(val, list):
                     options[name] = "\n".join(val)
 
-    def write(self, fp):
+    def write(self, fp: TextIOBase):
         """
         Override the write() method to write comments
         """
@@ -186,6 +188,10 @@ class TABConfigParser(configparser.RawConfigParser):
                 fp.write("%s\n" % (key))
             # write the separator line for stanza
             fp.write("\n")
+
+        # remove the trailing lines in a file, as the content should be written as-is
+        fp.seek(fp.tell() - 1, SEEK_SET)
+        fp.truncate()
 
     def optionxform(self, optionstr):
         return optionstr
