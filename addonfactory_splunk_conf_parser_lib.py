@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 import configparser
+from os import SEEK_SET
+from typing import Any, Dict
 
 COMMENT_PREFIX = ";#*"
 COMMENT_KEY = "__COMMENTS__"
@@ -27,6 +29,10 @@ class TABConfigParser(configparser.RawConfigParser):
     2. Additional comment prefix such as *
     3. Support multiline end with \
     """
+
+    _defaults: Dict[Any, Any]
+    _sections: Dict[Any, Any]
+    _optcre: Dict[Any, Any]
 
     def _read(self, fp, fpname):
         """
@@ -149,7 +155,8 @@ class TABConfigParser(configparser.RawConfigParser):
                 if isinstance(val, list):
                     options[name] = "\n".join(val)
 
-    def write(self, fp):
+    # As the type of fp is not defined in RawConfigParser which is the parent class so we have to go with Any.
+    def write(self, fp: Any, *args) -> None:
         """
         Override the write() method to write comments
         """
@@ -162,7 +169,6 @@ class TABConfigParser(configparser.RawConfigParser):
         if hasattr(self, "fields_outside_stanza"):
             for field in self.fields_outside_stanza:
                 fp.write(field)
-
         if self._defaults:
             fp.write("[%s]\n" % DEFAULTSECT)
             for (key, value) in list(self._defaults.items()):
@@ -186,6 +192,10 @@ class TABConfigParser(configparser.RawConfigParser):
                 fp.write("%s\n" % (key))
             # write the separator line for stanza
             fp.write("\n")
+
+        # remove the trailing lines in a file, as the content should be written as-is
+        fp.seek(fp.tell() - 1, SEEK_SET)
+        fp.truncate()
 
     def optionxform(self, optionstr):
         return optionstr
