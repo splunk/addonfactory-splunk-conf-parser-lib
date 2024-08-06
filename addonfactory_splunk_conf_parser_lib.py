@@ -16,8 +16,9 @@
 import configparser
 from os import SEEK_SET
 from typing import Any, Dict
+from re import compile, VERBOSE
 
-COMMENT_PREFIX = ";#*"
+COMMENT_PREFIX = [";", "#", "*"]
 COMMENT_KEY = "__COMMENTS__"
 
 
@@ -33,6 +34,8 @@ class TABConfigParser(configparser.RawConfigParser):
     _defaults: Dict[Any, Any]
     _sections: Dict[Any, Any]
     _optcre: Dict[Any, Any]
+    # overriding the section regex for Splunk as blank '[]' stanza is valid in case for default.meta
+    SECTCRE = compile(pattern=r"\[(?P<header>.*)\]", flags=VERBOSE)
 
     def _read(self, fp, fpname):
         """
@@ -43,7 +46,8 @@ class TABConfigParser(configparser.RawConfigParser):
         cursect = None  # None, or a dictionary
         optname = None
         lineno = 0
-        e = None  # None, or an exception
+        line: str
+        exc = None  # None, or an exception
 
         comment_index = 0
         self.top_comments = []
@@ -109,7 +113,7 @@ class TABConfigParser(configparser.RawConfigParser):
                 # no section header in the file?
 
                 elif cursect is None:
-                    # disable the exception since splunk allows the field outside stanzas
+                    # disable the exception since Splunk allows the field outside stanzas
                     #                     raise MissingSectionHeaderError(fpname, lineno, line)
                     self.fields_outside_stanza.append(line)
                 # an option line?
@@ -140,13 +144,12 @@ class TABConfigParser(configparser.RawConfigParser):
                         # exception but keep going. the exception will be
                         # raised at the end of the file and will contain a
                         # list of all bogus lines
-                        if not e:
-                            e = ParsingError(fpname)
-                        e.append(lineno, repr(line))
+                        if not exc:
+                            exc = ParsingError(fpname)
+                        exc.append(lineno, repr(line))
         # if any parsing errors occurred, raise an exception
-        if e:
-            raise e
-
+        if exc:
+            raise exc
         # join the multi-line values collected while reading
         all_sections = [self._defaults]
         all_sections.extend(list(self._sections.values()))
