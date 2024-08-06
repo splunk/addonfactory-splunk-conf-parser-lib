@@ -85,6 +85,68 @@ tag = enabled
         parser.write(output)
         self.assertEqual(conf, output.getvalue())
 
+    def test_write_default_meta(self):
+        """
+        Parsing of default stanza as '[]' as it is valid for default.meta in Splunk
+        """
+        conf = """
+# Application-level permissions
+
+[]
+owner = admin
+access = read : [ * ], write : [ admin, sc_admin ]
+export = system
+
+[props]
+owner = admin
+access = read : [ * ], write : [ admin, sc_admin ]
+export = system
+"""
+        parser = conf_parser.TABConfigParser()
+        parser.read_string(conf)
+        output = io.StringIO()
+        parser.write(output)
+        self.assertEqual(conf, output.getvalue())
+
+    def test_write_extra_lines_between_stanza(self):
+        """
+        In case of a conf file with extra 'n' new lines between stanzas,
+        there would one empty new line between the end and start
+        """
+        conf = """
+[stanza_0]
+k = v
+
+
+[stanza_1]
+key = value
+"""
+        parser = conf_parser.TABConfigParser()
+        parser.read_string(conf)
+        output = io.StringIO()
+        parser.write(output)
+        self.assertEqual(conf.replace("\n\n\n", "\n\n"), output.getvalue())
+    
+    def test_write_extra_lines_at_end(self):
+        """
+        In case of a conf file with extra 'n' new lines at the end,
+        we remove all and keep just one.
+        """
+        conf = """
+[stanza_0]
+k = v
+
+[stanza_1]
+key = value
+
+
+"""
+        parser = conf_parser.TABConfigParser()
+        parser.read_string(conf)
+        output = io.StringIO()
+        parser.write(output)
+        self.assertEqual(conf.rstrip() + "\n", output.getvalue())
+
     def test_items(self):
         conf = """
 #
