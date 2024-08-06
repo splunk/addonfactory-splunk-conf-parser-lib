@@ -126,7 +126,7 @@ key = value
         output = io.StringIO()
         parser.write(output)
         self.assertEqual(conf.replace("\n\n\n", "\n\n"), output.getvalue())
-    
+
     def test_write_extra_lines_at_end(self):
         """
         In case of a conf file with extra 'n' new lines at the end,
