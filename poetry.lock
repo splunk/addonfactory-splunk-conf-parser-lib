@@ -12,21 +12,6 @@ files = [
 ]
 
 [[package]]
-name = "configparser"
-version = "5.3.0"
-description = "Updated configparser from stdlib for earlier Pythons."
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "configparser-5.3.0-py3-none-any.whl", hash = "sha256:b065779fd93c6bf4cee42202fa4351b4bb842e96a3fb469440e484517a49b9fa"},
-    {file = "configparser-5.3.0.tar.gz", hash = "sha256:8be267824b541c09b08db124917f48ab525a6c3e837011f3130781a224c57090"},
-]
-
-[package.extras]
-docs = ["jaraco.packaging (>=9)", "jaraco.tidelift (>=1.4)", "rst.linker (>=1.9)", "sphinx"]
-testing = ["flake8 (<5)", "pytest (>=6)", "pytest-black (>=0.3.7)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=1.3)", "pytest-flake8", "pytest-mypy (>=0.9.1)", "types-backports"]
-
-[[package]]
 name = "exceptiongroup"
 version = "1.2.2"
 description = "Backport of PEP 654 (exception groups)"
@@ -163,4 +148,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "6f0e84f0dd9a0f44abede60002b69554d1dfd50b5b920a162f3da7499cfab5bd"
+content-hash = "d7a35246e59a29f563a5dae4b76339ee0c76948e1240593d5fc3e3ed770f096e"
