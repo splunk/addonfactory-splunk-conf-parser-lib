@@ -85,6 +85,54 @@ tag = enabled
         parser.write(output)
         self.assertEqual(conf, output.getvalue())
 
+    def test_write_empty(self):
+        conf = ""
+        parser = conf_parser.TABConfigParser()
+        parser.read_string(conf)
+        output = io.StringIO()
+        parser.write(output)
+        self.assertEqual(conf, output.getvalue())
+
+    def test_write_only_comments(self):
+        conf = """
+#
+# some comment here
+#
+"""
+        parser = conf_parser.TABConfigParser()
+        parser.read_string(conf)
+        output = io.StringIO()
+        parser.write(output)
+        self.assertEqual(conf, output.getvalue())
+
+    def test_write_only_default_section(self):
+        conf = """
+#
+# some comment here
+#
+[DEFAULT]
+attrib_one = value_one
+attrib_two = value_two
+"""
+        parser = conf_parser.TABConfigParser()
+        parser.read_string(conf)
+        output = io.StringIO()
+        parser.write(output)
+        self.assertEqual(conf, output.getvalue())
+
+    def test_write_fields_outside(self):
+        conf = """
+#
+#
+out_field = out_value
+out_field_two = out_value_two
+"""
+        parser = conf_parser.TABConfigParser()
+        parser.read_string(conf)
+        output = io.StringIO()
+        parser.write(output)
+        self.assertEqual(conf, output.getvalue())
+
     def test_items(self):
         conf = """
 #
