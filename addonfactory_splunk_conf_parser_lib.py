@@ -155,7 +155,8 @@ class TABConfigParser(configparser.RawConfigParser):
                 if isinstance(val, list):
                     options[name] = "\n".join(val)
 
-    # As the type of fp is not defined in RawConfigParser which is the parent class so we have to go with Any.
+    # As the type of `fp` is not defined in RawConfigParser (parent class)
+    # we define the type of `fp` as Any
     def write(self, fp: Any, *args) -> None:
         """
         Override the write() method to write comments
@@ -193,9 +194,12 @@ class TABConfigParser(configparser.RawConfigParser):
             # write the separator line for stanza
             fp.write("\n")
 
-        # remove the trailing lines in a file, as the content should be written as-is
-        fp.seek(fp.tell() - 1, SEEK_SET)
-        fp.truncate()
+        # multiple lines are added when there are stanzas/sections and its properties,
+        # hence we check if there are stanzas/sections before truncating the trailing newline
+        if self._defaults or self._sections:
+            # remove the trailing lines in a file, as the content should be written as-is
+            fp.seek(fp.tell() - 1, SEEK_SET)
+            fp.truncate()
 
     def optionxform(self, optionstr):
         return optionstr
