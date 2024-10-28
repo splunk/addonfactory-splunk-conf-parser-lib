@@ -28,7 +28,7 @@ jobs:
           FOSSA_API_KEY: ${{ secrets.FOSSA_API_KEY }}
 
   pre-commit:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -37,7 +37,7 @@ jobs:
       - uses: pre-commit/action@v3.0.1
 
   test-unit:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         python-version: [ 3.7, 3.8, 3.9, "3.10", "3.11", "3.12" ]
@@ -68,7 +68,7 @@ jobs:
       - compliance-copyrights
       - pre-commit
       - test-unit
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - uses: actions/checkout@v4
