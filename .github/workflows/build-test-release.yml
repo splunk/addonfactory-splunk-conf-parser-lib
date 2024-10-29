@@ -28,12 +28,12 @@ jobs:
           FOSSA_API_KEY: ${{ secrets.FOSSA_API_KEY }}
 
   pre-commit:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.7"
+          python-version: "3.12"
       - uses: pre-commit/action@v3.0.1
 
   test-unit:
