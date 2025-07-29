@@ -228,18 +228,19 @@ class TABConfigParser(configparser.RawConfigParser):
 
         return res
 
-    def item_dict(self):
+    def item_dict(self, preserve_comments: bool = False):
         res = {}
         sections = dict(self._sections)
         for section, key_values in list(sections.items()):
             kv = {}
             for k, v in list(key_values.items()):
                 if (
-                    not isinstance(k, str)
-                    or k.startswith(COMMENT_KEY)
-                    or k == "__name__"
+                    isinstance(k, str)
+                    and k != "__name__"
+                    and (
+                        preserve_comments or not k.startswith(COMMENT_KEY)
+                    )  # Include if comments are desired, OR if it's not a comment key
                 ):
-                    continue
-                kv[k] = v
+                    kv[k] = v
             res[section] = kv
         return res

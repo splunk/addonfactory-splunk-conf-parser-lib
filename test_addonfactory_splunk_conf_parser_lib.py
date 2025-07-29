@@ -49,6 +49,9 @@ tag = enabled
             parser.get("sourcetype:deprecated", "EVAL-deprecated_field"), '"old_value"'
         )
         self.assertEqual(parser.get("eventtype=some_eventtype", "tag"), "enabled")
+        self.assertEqual(
+            parser.top_comments, ["\n", "#\n", "# Very big copyright comment.\n", "#\n"]
+        )
 
     def test_read_incorrect_conf(self):
         conf = """
@@ -175,7 +178,7 @@ EVAL-field1 = "field1"
         expected_options = ["__name__", "EVAL-field1", "FIELDALIAS-field2"]
         self.assertEqual(expected_options, parser.options("source"))
 
-    def test_item_dict(self):
+    def test_item_dict_when_preserve_comment_False(self):
         conf = """
 #
 # Very big copyright comment.
@@ -208,7 +211,43 @@ tag2 = enabled
                 "tag2": "enabled",
             },
         }
+        # Default value of preserve_comments is False
         self.assertEqual(expected_item_dict, parser.item_dict())
+
+    def test_item_dict_when_preserve_comment_True(self):
+        conf = """
+#
+# Very big copyright comment.
+#
+[source]
+# This is a very simple field aliasing.
+FIELDALIAS-field1 = field2 AS field1 # inline comment
+EVAL-field3 = case(isnotnull(field4), "success",\
+                   isnotnull(field5), "failure")
+
+[sourcetype:deprecated]
+EVAL-deprecated_field = "old_value"
+
+[eventtype=some_eventtype]
+tag1 = enabled
+tag2 = enabled
+"""
+        parser = conf_parser.TABConfigParser()
+        parser.read_string(conf)
+        expected_item_dict = {
+            "source": {
+                "__COMMENTS__0": "# This is a very simple field aliasing.\n",
+                "FIELDALIAS-field1": "field2 AS field1 # inline comment",
+                "EVAL-field3": 'case(isnotnull(field4), "success",                   isnotnull(field5), "failure")',
+                "__COMMENTS__1": "\n",
+            },
+            "sourcetype:deprecated": {
+                "EVAL-deprecated_field": '"old_value"',
+                "__COMMENTS__2": "\n",
+            },
+            "eventtype=some_eventtype": {"tag1": "enabled", "tag2": "enabled"},
+        }
+        self.assertEqual(expected_item_dict, parser.item_dict(preserve_comments=True))
 
     def test_item_dict_when_there_is_empty_stanza(self):
         conf = """
