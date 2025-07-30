@@ -17,7 +17,7 @@ import configparser
 from os import SEEK_SET
 from typing import Any, Dict
 
-COMMENT_PREFIX = ";#*"
+COMMENT_PREFIX = [";", "#", "*"]
 COMMENT_KEY = "__COMMENTS__"
 
 
@@ -71,7 +71,6 @@ class TABConfigParser(configparser.RawConfigParser):
             if line.split(None, 1)[0].lower() == "rem" and line[0] in "rR":
                 # no leading whitespace
                 continue
-            # continuation line?
 
             # support multiline with \
             if add_space_to_next_line:
@@ -121,12 +120,6 @@ class TABConfigParser(configparser.RawConfigParser):
                         # This check is fine because the OPTCRE cannot
                         # match if it would set optval to None
                         if optval is not None:
-                            if vi in ("=", ":") and ";" in optval:
-                                # ';' is a comment delimiter only if it follows
-                                # a spacing character
-                                pos = optval.find(";")
-                                if pos != -1 and optval[pos - 1].isspace():
-                                    optval = optval[:pos]
                             optval = optval.strip()
                             # allow empty values
                             if optval == '""':
@@ -241,6 +234,16 @@ class TABConfigParser(configparser.RawConfigParser):
                         preserve_comments or not k.startswith(COMMENT_KEY)
                     )  # Include if comments are desired, OR if it's not a comment key
                 ):
+                    # Remove inline comments if preserve_comments is False
+                    if not preserve_comments:
+                        for comment_char in COMMENT_PREFIX:
+                            if comment_char in v:
+                                pos = v.find(comment_char)
+                                if v[pos - 1].isspace():
+                                    v = v[: pos - 1]
+                                else:
+                                    v = v[:pos]
+                                break
                     kv[k] = v
             res[section] = kv
         return res

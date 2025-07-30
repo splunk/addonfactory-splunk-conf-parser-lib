@@ -16,8 +16,13 @@
 import configparser
 import io
 import unittest
+import os
 
 import addonfactory_splunk_conf_parser_lib as conf_parser
+
+CONF_PATH = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)), "testdata", "test.conf"
+)
 
 
 class TABConfigParserTest(unittest.TestCase):
@@ -179,33 +184,14 @@ EVAL-field1 = "field1"
         self.assertEqual(expected_options, parser.options("source"))
 
     def test_item_dict_when_preserve_comment_False(self):
-        conf = """
-#
-# Very big copyright comment.
-#
-[source]
-# This is a very simple field aliasing.
-FIELDALIAS-field1 = field2 AS field1
-EVAL-field3 = case(isnotnull(field4), "success",\
-                   isnotnull(field5), "failure")
-
-[sourcetype:deprecated]
-EVAL-deprecated_field = "old_value"
-
-[eventtype=some_eventtype]
-tag1 = enabled
-tag2 = enabled
-"""
         parser = conf_parser.TABConfigParser()
-        parser.read_string(conf)
+        parser.read(CONF_PATH)
         expected_item_dict = {
             "source": {
                 "FIELDALIAS-field1": "field2 AS field1",
-                "EVAL-field3": 'case(isnotnull(field4), "success",                   isnotnull(field5), "failure")',
+                "EVAL-field3": 'case(isnotnull(field4), "success",\\\nisnotnull(field5), "failure")',
             },
-            "sourcetype:deprecated": {
-                "EVAL-deprecated_field": '"old_value"',
-            },
+            "sourcetype:deprecated": {"EVAL-deprecated_field": '"old_value"'},
             "eventtype=some_eventtype": {
                 "tag1": "enabled",
                 "tag2": "enabled",
@@ -215,37 +201,23 @@ tag2 = enabled
         self.assertEqual(expected_item_dict, parser.item_dict())
 
     def test_item_dict_when_preserve_comment_True(self):
-        conf = """
-#
-# Very big copyright comment.
-#
-[source]
-# This is a very simple field aliasing.
-FIELDALIAS-field1 = field2 AS field1 # inline comment
-EVAL-field3 = case(isnotnull(field4), "success",\
-                   isnotnull(field5), "failure")
-
-[sourcetype:deprecated]
-EVAL-deprecated_field = "old_value"
-
-[eventtype=some_eventtype]
-tag1 = enabled
-tag2 = enabled
-"""
         parser = conf_parser.TABConfigParser()
-        parser.read_string(conf)
+        parser.read(CONF_PATH)
         expected_item_dict = {
             "source": {
                 "__COMMENTS__0": "# This is a very simple field aliasing.\n",
-                "FIELDALIAS-field1": "field2 AS field1 # inline comment",
-                "EVAL-field3": 'case(isnotnull(field4), "success",                   isnotnull(field5), "failure")',
+                "FIELDALIAS-field1": "field2 AS field1",
+                "EVAL-field3": 'case(isnotnull(field4), "success",\\\nisnotnull(field5), "failure")',
                 "__COMMENTS__1": "\n",
             },
             "sourcetype:deprecated": {
                 "EVAL-deprecated_field": '"old_value"',
                 "__COMMENTS__2": "\n",
             },
-            "eventtype=some_eventtype": {"tag1": "enabled", "tag2": "enabled"},
+            "eventtype=some_eventtype": {
+                "tag1": "enabled ; Inline comment example using semicolon",
+                "tag2": "enabled # Inline comment using hash",
+            },
         }
         self.assertEqual(expected_item_dict, parser.item_dict(preserve_comments=True))
 
