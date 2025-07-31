@@ -25,3 +25,4 @@ header:
     - "*.lock"
     - ".*"
     - "renovate.json"
+    - testdata/**
