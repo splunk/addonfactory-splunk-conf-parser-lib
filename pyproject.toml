@@ -23,8 +23,6 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -43,9 +41,9 @@ homepage = "https://github.com/splunk/addonfactory-splunk-conf-parser-lib"
 keywords = ["splunk"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.9"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = ">=7"
 
 [build-system]
