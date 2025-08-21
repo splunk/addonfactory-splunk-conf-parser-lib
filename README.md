@@ -8,6 +8,8 @@ Currently, it supports:
 2. Additional comment prefix such as *
 3. Support multiline end with \
 
+This project supports Python 3.9+.
+
 ## Development
 
-This project uses `poetry 1.5.1`.
+This project uses `poetry 2.1.4`.
