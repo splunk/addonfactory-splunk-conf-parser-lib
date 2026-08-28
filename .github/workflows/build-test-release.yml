@@ -10,14 +10,14 @@ jobs:
     continue-on-error: true
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - run: |
           curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install-latest.sh | bash
           fossa analyze --debug
           fossa report attribution --format text > /tmp/THIRDPARTY
         env:
           FOSSA_API_KEY: ${{ secrets.FOSSA_API_KEY }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: THIRDPARTY
           path: /tmp/THIRDPARTY
@@ -28,10 +28,10 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
-          python-version: "3.12"
+          python-version: "3.14"
       - uses: pre-commit/action@v3.0.1
 
   test-unit:
@@ -40,15 +40,15 @@ jobs:
       matrix:
         python-version: [ 3.9, "3.10", "3.11", "3.12" ]
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
       - run: |
           curl -sSL https://install.python-poetry.org | python3 - --version 2.1.4
           poetry install
           poetry run pytest --junitxml=test-results/junit.xml
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: success() || failure()
         with:
           name: test-results-unit-python-${{ matrix.python-version }}
@@ -57,8 +57,8 @@ jobs:
   compliance-copyrights:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: apache/skywalking-eyes@v0.7.0
+      - uses: actions/checkout@v7
+      - uses: apache/skywalking-eyes@v0.9.0
 
   publish:
     needs:
@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           # Very important: semantic-release won't trigger a tagged
           # build if this is not set false
@@ -81,9 +81,9 @@ jobs:
           client-id: ${{ secrets.GH_APP_CLIENT_ID }}
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
-          python-version: "3.9"
+          python-version: "3.14"
       - run: |
           curl -sSL https://install.python-poetry.org | python3 - --version 2.1.4
           poetry install
